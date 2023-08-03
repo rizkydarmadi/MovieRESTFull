@@ -12,12 +12,12 @@ class MovieList(BaseModel):
     updated_at: datetime | None
 
     @field_serializer("created_at")
-    def serialize_dt(self, created_at: datetime, _info):
-        return created_at.isoformat()
+    def serialize_created_at(self, created_at: datetime, _info):
+        return created_at.strftime("%Y-%m-%d %H:%M:%S")
 
     @field_serializer("updated_at")
-    def serialize_dt(self, updated_at: datetime, _info):
-        return updated_at.isoformat() if updated_at != None else None
+    def serialize_updated_at(self, updated_at: datetime, _info):
+        return updated_at.strftime("%Y-%m-%d %H:%M:%S") if updated_at != None else None
 
 
 class MovieRequest(BaseModel):

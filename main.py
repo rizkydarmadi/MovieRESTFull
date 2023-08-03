@@ -5,9 +5,9 @@ from api import movie
 from database import SessionLocal, engine
 
 
-app = FastAPI()
+app = FastAPI(title="MovieRestFullAPI")
 
-app.include_router(movie.router, tags=["users"])
+app.include_router(movie.router, tags=["movie"])
 
 
 @app.on_event("startup")

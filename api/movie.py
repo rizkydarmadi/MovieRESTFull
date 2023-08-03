@@ -9,13 +9,15 @@ router = APIRouter()
 
 
 @router.get("/movie/", response_model=List[movies_schemas.MovieList])
-def read_movies(skip: int = 0, limit: int = 100, db: Session = Depends(deps.get_db)):
+async def read_movies(
+    skip: int = 0, limit: int = 100, db: Session = Depends(deps.get_db)
+):
     movies = MovieRepository.get_movies(db, skip=skip, limit=limit)
     return movies
 
 
 @router.post("/movie/", response_model=movies_schemas.MovieList)
-def create_movie(
+async def create_movie(
     item: movies_schemas.MovieRequest,
     db: Session = Depends(deps.get_db),
 ):
@@ -23,35 +25,35 @@ def create_movie(
 
 
 @router.get("/movie/{id}/", response_model=movies_schemas.MovieList)
-def read_movie(id: int, db: Session = Depends(deps.get_db)):
+async def read_detail_movie(id: int, db: Session = Depends(deps.get_db)):
     db_movie = MovieRepository.get_movie(db, id=id)
     if db_movie is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Movie not found")
     return db_movie
 
 
 @router.patch("/movie/{id}/", response_model=movies_schemas.MovieList)
-def read_movie(
+async def update_patch_movie(
     id: int, item: movies_schemas.MovieRequest, db: Session = Depends(deps.get_db)
 ):
     db_movie = MovieRepository.update_movie(db, id=id, movie=item)
     if db_movie is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Movie not found")
     return db_movie
 
 
 @router.put("/movie/{id}/", response_model=movies_schemas.MovieList)
-def read_movie(
+async def update_movie(
     id: int, item: movies_schemas.MovieRequest, db: Session = Depends(deps.get_db)
 ):
     db_movie = MovieRepository.update_movie(db, id=id, movie=item)
     if db_movie is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Movie not found")
     return db_movie
 
 
 @router.delete("/movie/{id}/")
-def read_movie(id: int, db: Session = Depends(deps.get_db)):
+async def delete_movie(id: int, db: Session = Depends(deps.get_db)):
     db_movie = MovieRepository.delete_movie(db, id=id)
     if db_movie is None:
         raise HTTPException(status_code=200, detail="succes delete")
