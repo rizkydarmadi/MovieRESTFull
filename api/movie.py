@@ -1,16 +1,21 @@
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 import deps
 from schemas import movies_schemas
 from repository.movie_repository import MovieRepository
+from schemas import DateQueryParam
 
 router = APIRouter()
 
 
 @router.get("/movie/", response_model=List[movies_schemas.MovieList])
 async def read_movies(
-    skip: int = 0, limit: int = 100, db: Session = Depends(deps.get_db)
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(
+        deps.get_db,
+    ),
 ):
     movies = MovieRepository.get_movies(db, skip=skip, limit=limit)
     return movies

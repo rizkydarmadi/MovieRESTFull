@@ -1,4 +1,4 @@
-from pydantic import BaseModel, field_serializer
+from pydantic import BaseModel, field_serializer, NonNegativeFloat
 from datetime import datetime
 
 
@@ -23,7 +23,7 @@ class MovieList(BaseModel):
 class MovieRequest(BaseModel):
     title: str
     description: str
-    rating: float
+    rating: NonNegativeFloat  # must be greater than 0
     image: str
 
     class Config:
