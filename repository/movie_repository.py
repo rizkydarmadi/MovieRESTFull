@@ -30,6 +30,12 @@ class MovieRepository:
         return db.query(models.Movie).filter(models.Movie.id == id).first()
 
     @staticmethod
+    def get_movie_by_name(db: Session, name: str):
+        return (
+            db.query(models.Movie).filter(models.Movie.title.ilike(f"%{name}%")).first()
+        )
+
+    @staticmethod
     def update_movie(db: Session, movie: movies_schemas.MovieRequest, id: int):
         movie_object: models.Movie = (
             db.query(models.Movie).filter(models.Movie.id == id).first()

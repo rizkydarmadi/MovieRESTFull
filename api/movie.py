@@ -32,6 +32,14 @@ async def read_detail_movie(id: int, db: Session = Depends(deps.get_db)):
     return db_movie
 
 
+@router.get("/search-movie/{name}/", response_model=movies_schemas.MovieList)
+async def read_detail_movie(name: str, db: Session = Depends(deps.get_db)):
+    db_movie = MovieRepository.get_movie_by_name(db, name=name)
+    if db_movie is None:
+        raise HTTPException(status_code=404, detail="Movie not found")
+    return db_movie
+
+
 @router.patch("/movie/{id}/", response_model=movies_schemas.MovieList)
 async def update_patch_movie(
     id: int, item: movies_schemas.MovieRequest, db: Session = Depends(deps.get_db)
